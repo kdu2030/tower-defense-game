@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
@@ -18,24 +16,19 @@ public class CameraMovement : MonoBehaviour {
 
     private Vector3 currentCamPosition;
 
-    private void Start() {
-
-
-    }
-
-    private void ClampCameraMovement(Vector3 cameraMovement) {
+    private Vector3 ClampCameraMovement(float propsedCamMovementX, float proposedCamMovementY) {
         float halfScreenHeight = Camera.main.orthographicSize;
         float halfScreenWidth = halfScreenHeight * Camera.main.aspect;
-
-        float topCamEdgeY = currentCamPosition.y + halfScreenHeight;
-        float bottomCamEdgeY = currentCamPosition.y - halfScreenHeight;
-        float rightCamEdgeX = currentCamPosition.x + halfScreenWidth;
-        float leftCamEdgeX = currentCamPosition.x - halfScreenWidth;
 
         float topGridEdgeY = topLeftGridPoint.position.y;
         float bottomGridEdgeY = bottomRightGridPoint.position.y;
         float rightGridEdgeX = bottomRightGridPoint.position.x;
         float leftGridEdgeX = topLeftGridPoint.position.x;
+
+        float finalCameraMovementX = Mathf.Clamp(propsedCamMovementX, leftGridEdgeX + halfScreenWidth, rightGridEdgeX - halfScreenWidth);
+        float finalCameraMovementY = Mathf.Clamp(proposedCamMovementY, bottomGridEdgeY + halfScreenHeight, topGridEdgeY - halfScreenHeight);
+
+        return new Vector3(finalCameraMovementX, finalCameraMovementY, currentCamPosition.z);
     }
 
 
@@ -48,11 +41,6 @@ public class CameraMovement : MonoBehaviour {
         float newPosX = currentCamPosition.x + xInput * cameraSpeedX;
         float newPosY = currentCamPosition.y + yInput * cameraSpeedY;
 
-        Camera.main.transform.position = new Vector3(newPosX, newPosY, currentCamPosition.z);
-
-        // TODO Add check to make sure that the camera doesn't scroll off the screen
-
-        ClampCameraMovement(new Vector3(newPosX, newPosY, currentCamPosition.z));
-
+        Camera.main.transform.position = ClampCameraMovement(newPosX, newPosY);
     }
 }
