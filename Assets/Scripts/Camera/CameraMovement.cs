@@ -10,13 +10,13 @@ public class CameraMovement : MonoBehaviour {
     [SerializeField]
     private float cameraSpeedY = 1f;
 
-    //[SerializeField]
-    //private Transform gridTransform;
+    [SerializeField]
+    private Transform topLeftGridPoint;
+
+    [SerializeField]
+    private Transform bottomRightGridPoint;
 
     private Vector3 currentCamPosition;
-
-
-
 
     private void Start() {
 
@@ -27,10 +27,21 @@ public class CameraMovement : MonoBehaviour {
         float halfScreenHeight = Camera.main.orthographicSize;
         float halfScreenWidth = halfScreenHeight * Camera.main.aspect;
 
-        float topEdgeY = currentCamPosition.y + halfScreenHeight;
-        float bottomEdgeY = currentCamPosition.y - halfScreenHeight;
-        float rightEdgeX = currentCamPosition.x + halfScreenWidth;
-        float leftEdgeX = currentCamPosition.x - halfScreenWidth;
+        float topCamEdgeY = currentCamPosition.y + halfScreenHeight;
+        float bottomCamEdgeY = currentCamPosition.y - halfScreenHeight;
+        float rightCamEdgeX = currentCamPosition.x + halfScreenWidth;
+        float leftCamEdgeX = currentCamPosition.x - halfScreenWidth;
+
+        float topGridEdgeY = topLeftGridPoint.position.y;
+        float bottomGridEdgeY = bottomRightGridPoint.position.y;
+        float rightGridEdgeX = bottomRightGridPoint.position.x;
+        float leftGridEdgeX = topLeftGridPoint.position.x;
+
+        Debug.LogFormat("Top Grid Edge Y: {0}", topGridEdgeY);
+        Debug.LogFormat("Bottom Grid Edge Y: {0}", bottomGridEdgeY);
+        Debug.LogFormat("Right Grid Edge X: {0}", rightGridEdgeX);
+        Debug.LogFormat("Left Grid Edge X: {0}", leftGridEdgeX);
+
 
 
 
