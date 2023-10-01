@@ -36,15 +36,6 @@ public class CameraMovement : MonoBehaviour {
         float bottomGridEdgeY = bottomRightGridPoint.position.y;
         float rightGridEdgeX = bottomRightGridPoint.position.x;
         float leftGridEdgeX = topLeftGridPoint.position.x;
-
-        Debug.LogFormat("Top Grid Edge Y: {0}", topGridEdgeY);
-        Debug.LogFormat("Bottom Grid Edge Y: {0}", bottomGridEdgeY);
-        Debug.LogFormat("Right Grid Edge X: {0}", rightGridEdgeX);
-        Debug.LogFormat("Left Grid Edge X: {0}", leftGridEdgeX);
-
-
-
-
     }
 
 
