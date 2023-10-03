@@ -38,8 +38,8 @@ public class CameraMovement : MonoBehaviour {
 
         currentCamPosition = Camera.main.transform.position;
 
-        float newPosX = currentCamPosition.x + xInput * cameraSpeedX;
-        float newPosY = currentCamPosition.y + yInput * cameraSpeedY;
+        float newPosX = currentCamPosition.x + xInput * cameraSpeedX * Time.deltaTime;
+        float newPosY = currentCamPosition.y + yInput * cameraSpeedY * Time.deltaTime;
 
         Camera.main.transform.position = ClampCameraMovement(newPosX, newPosY);
     }

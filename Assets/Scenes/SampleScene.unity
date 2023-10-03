@@ -1177,8 +1177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ef136cb012d5042b81b584fffc7d1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSpeedX: 0.1
-  cameraSpeedY: 0.1
+  cameraSpeedX: 20
+  cameraSpeedY: 20
   topLeftGridPoint: {fileID: 422188619}
   bottomRightGridPoint: {fileID: 972867352}
 --- !u!1 &524379466
