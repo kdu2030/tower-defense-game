@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour {
     private Animator animator;
     private CharacterController characterController;
+    private SpriteRenderer spriteRenderer;
     private int directionHash;
     private int actionHash;
     private int waypointIndex = 0;
@@ -13,6 +14,7 @@ public class EnemyMovement : MonoBehaviour {
     private void Start() {
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         directionHash = Animator.StringToHash("Direction");
         actionHash = Animator.StringToHash("Action");
     }
@@ -40,9 +42,10 @@ public class EnemyMovement : MonoBehaviour {
             animator.SetInteger(directionHash, (int)EnemyDirection.Up);
         }
         else {
-            // TODO: Add check for left right and flip animation
             animator.SetInteger(directionHash, (int)EnemyDirection.Side);
         }
+
+        spriteRenderer.flipX = movementDirection.x > 0;
     }
 
     private void Update() {
