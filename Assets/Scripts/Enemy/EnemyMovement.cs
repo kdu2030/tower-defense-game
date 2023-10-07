@@ -23,9 +23,14 @@ public class EnemyMovement : MonoBehaviour {
         Transform targetWaypoint = EnemyWaypoints.waypoints[waypointIndex];
         Vector3 direction = targetWaypoint.position - transform.position;
         characterController.Move(direction.normalized * enemySpeed * Time.deltaTime);
+
         if (direction.magnitude <= 0.4f && waypointIndex < EnemyWaypoints.waypoints.Length - 1) {
             waypointIndex++;
         }
+        else if (direction.magnitude <= 0.4f) {
+            Destroy(this.gameObject);
+        }
+
         return direction;
     }
 
