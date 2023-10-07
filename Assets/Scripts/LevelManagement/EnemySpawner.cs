@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemySpawner : MonoBehaviour {
     [Header("References")]
@@ -20,6 +20,12 @@ public class EnemySpawner : MonoBehaviour {
     private int enemiesLeftToSpawn;
     private bool isSpawning;
 
+    public static UnityEvent enemyDeathEvent { get; set; } = new UnityEvent();
+
+    private void HandleEnemyDeath() {
+        enemiesAlive--;
+    }
+
     private int GetNumEnemiesInWave() {
         return Mathf.RoundToInt(baseEnemies * (Mathf.Pow(currentWave, difficultyScale)));
     }
@@ -27,6 +33,7 @@ public class EnemySpawner : MonoBehaviour {
     private void InitializeWave() {
         isSpawning = true;
         enemiesLeftToSpawn = GetNumEnemiesInWave();
+        timeSinceLastSpawn = 1f / enemiesPerSecond;
     }
 
     private void SpawnEnemy() {
@@ -37,9 +44,17 @@ public class EnemySpawner : MonoBehaviour {
         timeSinceLastSpawn = 0;
     }
 
+    private IEnumerator SetupNextWave() {
+        currentWave++;
+        yield return new WaitForSeconds(timeBetweenWaves);
+        InitializeWave();
+    }
+
+    public void Awake() {
+        enemyDeathEvent.AddListener(HandleEnemyDeath);
+    }
 
     private void Start() {
-        timeSinceLastSpawn = 1f / enemiesPerSecond;
         InitializeWave();
     }
 
@@ -53,6 +68,11 @@ public class EnemySpawner : MonoBehaviour {
         if (enemiesLeftToSpawn > 0 && timeSinceLastSpawn >= (1f / enemiesPerSecond)) {
             SpawnEnemy();
         }
+        else if (enemiesAlive <= 0 && enemiesLeftToSpawn <= 0) {
+            isSpawning = false;
+            StartCoroutine(SetupNextWave());
+        }
+
     }
 
 }
