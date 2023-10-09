@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Enemies
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: Over Path
     uniqueID: 3180400741
+    locked: 0
+  - name: Towers
+    uniqueID: 3650351155
     locked: 0

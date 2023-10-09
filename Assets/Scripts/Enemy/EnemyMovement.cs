@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
     private Animator animator;
-    private CharacterController characterController;
     private SpriteRenderer spriteRenderer;
     private int directionHash;
     private int actionHash;
@@ -13,7 +12,6 @@ public class EnemyMovement : MonoBehaviour {
 
     private void Start() {
         animator = GetComponent<Animator>();
-        characterController = GetComponent<CharacterController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         directionHash = Animator.StringToHash("Direction");
         actionHash = Animator.StringToHash("Action");
@@ -22,7 +20,7 @@ public class EnemyMovement : MonoBehaviour {
     private Vector3 MoveEnemy() {
         Transform targetWaypoint = EnemyWaypoints.waypoints[waypointIndex];
         Vector3 direction = targetWaypoint.position - transform.position;
-        characterController.Move(direction.normalized * enemySpeed * Time.deltaTime);
+        transform.Translate(direction.normalized * enemySpeed * Time.deltaTime);
 
         if (direction.magnitude <= 0.4f && waypointIndex < EnemyWaypoints.waypoints.Length - 1) {
             waypointIndex++;
@@ -54,7 +52,7 @@ public class EnemyMovement : MonoBehaviour {
         spriteRenderer.flipX = movementDirection.x > 0;
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         Vector3 updatedEnemyDirection = MoveEnemy();
         UpdateAnimation(updatedEnemyDirection);
     }
