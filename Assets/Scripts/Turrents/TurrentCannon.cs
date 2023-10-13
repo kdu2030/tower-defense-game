@@ -4,12 +4,18 @@ public class TurrentCannon : MonoBehaviour {
     [Header("References")]
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Transform rotationPoint;
+    [SerializeField] private Transform spawnPoint;
+
+    [SerializeField] private Transform bulletsParent;
+    [SerializeField] private GameObject bulletPrefab;
 
     [Header("References")]
     [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float bulletsPerSecond = 5f;
 
     private Transform target;
     private CircleCollider2D circleCollider;
+    private float timeSinceFired = 0f;
 
     private void Start() {
         circleCollider = GetComponent<CircleCollider2D>();
@@ -32,6 +38,21 @@ public class TurrentCannon : MonoBehaviour {
         }
     }
 
+    private void Shoot() {
+        GameObject bulletObject = Instantiate(bulletPrefab, spawnPoint.position, Quaternion.identity, bulletsParent);
+        Bullet bullet = bulletObject.GetComponent<Bullet>();
+        bullet.target = target;
+    }
+
+    private void HandleShoot() {
+        timeSinceFired += Time.deltaTime;
+
+        if (timeSinceFired >= 1f / bulletsPerSecond) {
+            Shoot();
+            timeSinceFired = 0f;
+        }
+    }
+
     private void FixedUpdate() {
         if (target == null) {
             FindTarget();
@@ -42,6 +63,7 @@ public class TurrentCannon : MonoBehaviour {
         }
         else if (target != null) {
             RotateTowardsTarget();
+            HandleShoot();
         }
 
     }
