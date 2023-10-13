@@ -12,16 +12,18 @@ public class Bullet : MonoBehaviour {
     }
 
     private void RotateTowardsTarget() {
+        transform.rotation = RotationHelpers.GetTargetAngle(transform, target.transform);
+    }
+
+    private void MoveTowardsTarget() {
         Vector2 direction = (target.position - transform.position).normalized;
-        float targetBulletAngle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x) * Mathf.Rad2Deg - 90f;
-        Quaternion bulletRotationTarget = Quaternion.Euler(0, 0, targetBulletAngle);
-        transform.rotation = bulletRotationTarget;
         rb.velocity = direction * bulletSpeed;
     }
 
     private void FixedUpdate() {
         if (target) {
             RotateTowardsTarget();
+            MoveTowardsTarget();
         }
     }
 }

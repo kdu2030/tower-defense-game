@@ -26,8 +26,7 @@ public class TurrentCannon : MonoBehaviour {
     }
 
     private void RotateTowardsTarget() {
-        float rotationAngleDeg = Mathf.Atan2(transform.position.y - target.position.y, transform.position.x - target.position.x) * Mathf.Rad2Deg + 90f;
-        Quaternion targetAngle = Quaternion.Euler(0, 0, rotationAngleDeg);
+        Quaternion targetAngle = RotationHelpers.GetTargetAngle(transform, target);
         rotationPoint.rotation = Quaternion.RotateTowards(transform.rotation, targetAngle, rotationSpeed * Time.deltaTime);
     }
 
@@ -39,7 +38,7 @@ public class TurrentCannon : MonoBehaviour {
     }
 
     private void Shoot() {
-        GameObject bulletObject = Instantiate(bulletPrefab, spawnPoint.position, Quaternion.identity, bulletsParent);
+        GameObject bulletObject = Instantiate(bulletPrefab, spawnPoint.position, rotationPoint.rotation, bulletsParent);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
         bullet.target = target;
     }
