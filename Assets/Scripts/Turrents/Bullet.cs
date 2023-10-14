@@ -45,9 +45,7 @@ public class Bullet : MonoBehaviour {
 
         if (targetGameObject.layer == enemyLayerNum) {
             EnemyLife enemyLife = targetGameObject.GetComponent<EnemyLife>();
-            if (enemyLife.UpdateLivesRemaining(damage) <= 0) {
-                target = null;
-            };
+            enemyLife.UpdateLivesRemaining(damage);
             Destroy(gameObject);
         }
     }
