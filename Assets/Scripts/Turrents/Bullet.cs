@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour {
 
     private Rigidbody2D rb;
     private int enemyLayerNum;
-    public Transform target { get; set; }
+    public GameObject target { get; set; }
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -22,21 +22,23 @@ public class Bullet : MonoBehaviour {
     }
 
     private void MoveTowardsTarget() {
-        Vector2 direction = (target.position - transform.position).normalized;
+        Vector2 direction = (target.transform.position - transform.transform.position).normalized;
         rb.velocity = direction * bulletSpeed;
     }
 
-    private void MoveForward() {
-        rb.velocity = transform.position.normalized * bulletSpeed;
+    private bool IsStillAlive() {
+        EnemyLife enemyLife = target.GetComponent<EnemyLife>();
+        return enemyLife.LivesRemaining > 0;
     }
 
     private void FixedUpdate() {
+        if (target && !IsStillAlive()) {
+            Destroy(gameObject);
+        }
+
         if (target) {
             RotateTowardsTarget();
             MoveTowardsTarget();
-        }
-        else {
-            MoveForward();
         }
     }
 

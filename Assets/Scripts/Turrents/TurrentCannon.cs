@@ -40,7 +40,7 @@ public class TurrentCannon : MonoBehaviour {
     private void Shoot() {
         GameObject bulletObject = Instantiate(bulletPrefab, spawnPoint.position, rotationPoint.rotation, bulletsParent);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
-        bullet.target = target;
+        bullet.target = target.gameObject;
     }
 
     private void HandleShoot() {

@@ -5,5 +5,6 @@ public enum EnemyDirection {
 }
 
 public enum EnemyAction {
-    Walk
+    Walk,
+    Death
 }
