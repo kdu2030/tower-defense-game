@@ -19,7 +19,4 @@ public class EnemyLife : MonoBehaviour {
         }
         return LivesRemaining;
     }
-
-
-
 }
