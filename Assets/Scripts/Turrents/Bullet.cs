@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour {
 
     [Header("Attributes")]
     [SerializeField] private float bulletSpeed;
+    [SerializeField] private int damage = 1;
 
     private Rigidbody2D rb;
     private int enemyLayerNum;
@@ -33,7 +34,11 @@ public class Bullet : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.layer == enemyLayerNum) {
+        GameObject targetGameObject = collision.gameObject;
+
+        if (targetGameObject.layer == enemyLayerNum) {
+            EnemyLife enemyLife = targetGameObject.GetComponent<EnemyLife>();
+            enemyLife.UpdateLivesRemaining(damage);
             Destroy(gameObject);
         }
     }

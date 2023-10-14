@@ -26,7 +26,7 @@ public class EnemyMovement : MonoBehaviour {
             waypointIndex++;
         }
         else if (direction.magnitude <= 0.4f) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             EnemySpawner.enemyDeathEvent.Invoke();
         }
 
