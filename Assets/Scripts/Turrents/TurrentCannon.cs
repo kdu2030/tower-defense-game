@@ -35,6 +35,10 @@ public class TurrentCannon : MonoBehaviour {
         if (colliders.Length > 0) {
             target = colliders[0].gameObject.transform;
         }
+
+        if (!target || target.GetComponent<EnemyLife>().LivesRemaining <= 0) {
+            target = null;
+        }
     }
 
     private void Shoot() {

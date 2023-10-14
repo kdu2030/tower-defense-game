@@ -26,11 +26,8 @@ public class EnemyLife : MonoBehaviour {
 
     public int UpdateLivesRemaining(int damage) {
         LivesRemaining -= damage;
-        //if (animator.GetInteger(actionHash) != (int)EnemyAction.Death && LivesRemaining <= 0) {
-        //    SetEnemyAnimation();
-        //}
-        if (LivesRemaining <= 0) {
-            //Destroy(gameObject);
+        if (animator.GetInteger(actionHash) != (int)EnemyAction.Death && LivesRemaining <= 0) {
+            SetEnemyAnimation();
         }
         return LivesRemaining;
 

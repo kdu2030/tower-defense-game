@@ -32,11 +32,10 @@ public class Bullet : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (target && !IsStillAlive()) {
+        if (!target || target && !IsStillAlive()) {
             Destroy(gameObject);
         }
-
-        if (target) {
+        else {
             RotateTowardsTarget();
             MoveTowardsTarget();
         }
