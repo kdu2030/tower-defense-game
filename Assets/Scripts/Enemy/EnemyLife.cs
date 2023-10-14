@@ -11,12 +11,13 @@ public class EnemyLife : MonoBehaviour {
         LivesRemaining = enemyLives;
     }
 
-    public void UpdateLivesRemaining(int damage) {
+    public int UpdateLivesRemaining(int damage) {
         LivesRemaining -= damage;
         if (LivesRemaining <= 0) {
             EnemySpawner.enemyDeathEvent.Invoke();
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
+        return LivesRemaining;
     }
 
 

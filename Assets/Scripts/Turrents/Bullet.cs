@@ -5,7 +5,7 @@ public class Bullet : MonoBehaviour {
     [SerializeField] private LayerMask enemyLayer;
 
     [Header("Attributes")]
-    [SerializeField] private float bulletSpeed;
+    [SerializeField] private float bulletSpeed = 5f;
     [SerializeField] private int damage = 1;
 
     private Rigidbody2D rb;
@@ -26,10 +26,17 @@ public class Bullet : MonoBehaviour {
         rb.velocity = direction * bulletSpeed;
     }
 
+    private void MoveForward() {
+        rb.velocity = transform.position.normalized * bulletSpeed;
+    }
+
     private void FixedUpdate() {
         if (target) {
             RotateTowardsTarget();
             MoveTowardsTarget();
+        }
+        else {
+            MoveForward();
         }
     }
 
@@ -38,7 +45,9 @@ public class Bullet : MonoBehaviour {
 
         if (targetGameObject.layer == enemyLayerNum) {
             EnemyLife enemyLife = targetGameObject.GetComponent<EnemyLife>();
-            enemyLife.UpdateLivesRemaining(damage);
+            if (enemyLife.UpdateLivesRemaining(damage) <= 0) {
+                target = null;
+            };
             Destroy(gameObject);
         }
     }
