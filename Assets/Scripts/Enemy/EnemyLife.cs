@@ -1,18 +1,24 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class EnemyLife : MonoBehaviour {
     [Header("Attributes")]
-    [SerializeField] private int enemyLives = 5;
+    [SerializeField] private float enemyLives = 5;
+    [SerializeField] private GameObject healthbarObject;
 
-    public int LivesRemaining { get; set; }
+    public float LivesRemaining { get; set; }
     private Animator animator;
-    private int actionHash;
+    private Healthbar healthbar;
 
+    private int actionHash;
 
     private void Start() {
         LivesRemaining = enemyLives;
         animator = GetComponent<Animator>();
         actionHash = Animator.StringToHash("Action");
+
+        healthbar = healthbarObject.GetComponent<Healthbar>();
+        healthbar.MaxHealth = enemyLives;
     }
 
     private void SetEnemyAnimation() {
@@ -24,12 +30,17 @@ public class EnemyLife : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    public int UpdateLivesRemaining(int damage) {
+    public float UpdateLivesRemaining(float damage) {
         LivesRemaining -= damage;
+        healthbar.UpdateHealthBar(LivesRemaining);
+
+        if (!healthbarObject.activeSelf) {
+            healthbarObject.SetActive(true);
+        }
+
         if (animator.GetInteger(actionHash) != (int)EnemyAction.Death && LivesRemaining <= 0) {
             SetEnemyAnimation();
         }
         return LivesRemaining;
-
     }
 }

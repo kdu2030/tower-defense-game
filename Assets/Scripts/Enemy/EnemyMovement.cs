@@ -1,18 +1,21 @@
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
+    [SerializeField]
+    private float enemySpeed;
+
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private EnemyLife enemyLife;
+
     private int directionHash;
     private int actionHash;
     private int waypointIndex = 0;
 
-    [SerializeField]
-    private float enemySpeed;
-
     private void Start() {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        enemyLife = GetComponent<EnemyLife>();
         directionHash = Animator.StringToHash("Direction");
         actionHash = Animator.StringToHash("Action");
     }
