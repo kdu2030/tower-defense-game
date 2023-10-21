@@ -50,3 +50,6 @@ TagManager:
   - name: Towers
     uniqueID: 3650351155
     locked: 0
+  - name: Mouse
+    uniqueID: 2967784675
+    locked: 0
