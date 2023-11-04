@@ -22,6 +22,6 @@ public class PlacementSystem : MonoBehaviour {
     private void Update() {
         Vector2 mousePosition = GetMousePosition();
         Vector3Int cellPosition = grid.WorldToCell(mousePosition);
-        cellIndicator.transform.position = grid.CellToWorld(cellPosition);
+        cellIndicator.transform.position = grid.GetCellCenterWorld(cellPosition);
     }
 }
