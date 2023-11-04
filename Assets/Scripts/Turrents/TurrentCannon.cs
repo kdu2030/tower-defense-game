@@ -26,7 +26,7 @@ public class TurrentCannon : MonoBehaviour {
     }
 
     private void RotateTowardsTarget() {
-        Quaternion targetAngle = RotationHelpers.GetTargetAngle(transform, target);
+        Quaternion targetAngle = TransformHelpers.GetTargetAngle(transform, target);
         rotationPoint.rotation = Quaternion.RotateTowards(transform.rotation, targetAngle, rotationSpeed * Time.deltaTime);
     }
 

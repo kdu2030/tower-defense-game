@@ -5,13 +5,18 @@ public class PlacementSystem : MonoBehaviour {
     [SerializeField] private GameObject cellIndicator;
     [SerializeField] private Grid grid;
 
+    private SpriteRenderer indicatorSpriteRenderer;
+
     private Vector2 GetMousePosition() {
         Vector3 mousePositionPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         return new Vector2(mousePositionPoint.x, mousePositionPoint.y);
     }
 
     private void Start() {
+        indicatorSpriteRenderer = cellIndicator.GetComponent<SpriteRenderer>();
 
+        Vector2 indicatorDimensions = indicatorSpriteRenderer.bounds.size;
+        cellIndicator.transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
     }
 
     private void Update() {

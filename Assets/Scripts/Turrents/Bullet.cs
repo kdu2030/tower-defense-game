@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour {
     }
 
     private void RotateTowardsTarget() {
-        transform.rotation = RotationHelpers.GetTargetAngle(transform, target.transform);
+        transform.rotation = TransformHelpers.GetTargetAngle(transform, target.transform);
     }
 
     private void MoveTowardsTarget() {
