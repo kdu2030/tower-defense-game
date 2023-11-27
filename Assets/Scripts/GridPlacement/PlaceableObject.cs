@@ -14,5 +14,8 @@ public class PlaceableObject {
     [field: SerializeField]
     public GameObject Prefab { get; private set; }
 
+    [field: SerializeField]
+    public bool OverrideCalculatedSize { get; private set; }
+
 
 }
