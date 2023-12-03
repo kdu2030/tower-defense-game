@@ -6,7 +6,6 @@ public class TurrentCannon : MonoBehaviour {
     [SerializeField] private Transform rotationPoint;
     [SerializeField] private Transform spawnPoint;
 
-    [SerializeField] private Transform bulletsParent;
     [SerializeField] private GameObject bulletPrefab;
 
     [Header("References")]
@@ -42,7 +41,7 @@ public class TurrentCannon : MonoBehaviour {
     }
 
     private void Shoot() {
-        GameObject bulletObject = Instantiate(bulletPrefab, spawnPoint.position, rotationPoint.rotation, bulletsParent);
+        GameObject bulletObject = Instantiate(bulletPrefab, spawnPoint.position, rotationPoint.rotation);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
         bullet.target = target.gameObject;
     }

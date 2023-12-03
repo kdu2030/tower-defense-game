@@ -6,8 +6,10 @@ public class PlacementSystem : MonoBehaviour {
     [SerializeField] private Grid grid;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private GameObject placementSystemPanel;
+    [SerializeField] private PlaceableObjectsDB placeableObjectsDB;
 
     private SpriteRenderer indicatorSpriteRenderer;
+    private PlaceableObject selectedObject = null;
     private bool isBuilderActive = false;
 
     private void Awake() {
@@ -15,7 +17,7 @@ public class PlacementSystem : MonoBehaviour {
         indicatorSpriteRenderer = cellIndicator.GetComponent<SpriteRenderer>();
         Vector2 indicatorDimensions = indicatorSpriteRenderer.bounds.size;
         cellIndicator.transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
-        inputManager.ActivateBuilder += FlipBuilderState;
+        inputManager.ActivateBuilder += StopPlacement;
     }
 
     private void UpdateBuilderState(bool newBuilderState) {
@@ -24,8 +26,10 @@ public class PlacementSystem : MonoBehaviour {
         placementSystemPanel.SetActive(newBuilderState);
     }
 
-    private void FlipBuilderState() {
+    private void StopPlacement() {
         UpdateBuilderState(!isBuilderActive);
+        selectedObject = null;
+        inputManager.OnClicked -= PlaceGameObject;
     }
 
     private Vector2 GetMousePosition() {
@@ -37,6 +41,25 @@ public class PlacementSystem : MonoBehaviour {
         Vector2 mousePosition = GetMousePosition();
         Vector3Int cellPosition = grid.WorldToCell(mousePosition);
         cellIndicator.transform.position = grid.GetCellCenterWorld(cellPosition);
+    }
+
+    public void StartPlacement(int placeableObjectID) {
+        selectedObject = placeableObjectsDB.PlaceableObjects.Find(placeableObject => placeableObject.ID == placeableObjectID);
+        if (selectedObject == null) {
+            Debug.LogError($"Unable to find object with id {placeableObjectID}");
+            return;
+        }
+        inputManager.OnClicked += PlaceGameObject;
+    }
+
+    public void PlaceGameObject() {
+        if (selectedObject == null || inputManager.IsPointerOverUI()) {
+            return;
+        }
+        Vector2 mousePosition = GetMousePosition();
+        Vector3Int cellPosition = grid.WorldToCell(mousePosition);
+        GameObject placedGameObject = Instantiate(selectedObject.Prefab);
+        placedGameObject.transform.position = cellPosition;
     }
 
     private void Update() {

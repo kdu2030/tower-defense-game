@@ -346,8 +346,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   rotationPoint: {fileID: 2570678348551790140}
-  spawnPoint: {fileID: 0}
-  bulletsParent: {fileID: 0}
-  bulletPrefab: {fileID: 0}
+  spawnPoint: {fileID: 6499476026432345804}
+  bulletPrefab: {fileID: 6887389440053010224, guid: a9ebfcbcf3f35a843843b2985ce1bfdb, type: 3}
   rotationSpeed: 100
   bulletsPerSecond: 5
