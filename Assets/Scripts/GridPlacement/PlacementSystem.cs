@@ -5,21 +5,27 @@ public class PlacementSystem : MonoBehaviour {
     [SerializeField] private GameObject cellIndicator;
     [SerializeField] private Grid grid;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private GameObject placementSystemPanel;
 
     private SpriteRenderer indicatorSpriteRenderer;
     private bool isBuilderActive = false;
 
     private void Awake() {
-        cellIndicator.SetActive(isBuilderActive);
+        UpdateBuilderState(false);
         indicatorSpriteRenderer = cellIndicator.GetComponent<SpriteRenderer>();
         Vector2 indicatorDimensions = indicatorSpriteRenderer.bounds.size;
         cellIndicator.transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
-        inputManager.ActivateBuilder += UpdateBuilderState;
+        inputManager.ActivateBuilder += FlipBuilderState;
     }
 
-    private void UpdateBuilderState() {
-        isBuilderActive = !isBuilderActive;
-        cellIndicator.SetActive(isBuilderActive);
+    private void UpdateBuilderState(bool newBuilderState) {
+        isBuilderActive = newBuilderState;
+        cellIndicator.SetActive(newBuilderState);
+        placementSystemPanel.SetActive(newBuilderState);
+    }
+
+    private void FlipBuilderState() {
+        UpdateBuilderState(!isBuilderActive);
     }
 
     private Vector2 GetMousePosition() {
