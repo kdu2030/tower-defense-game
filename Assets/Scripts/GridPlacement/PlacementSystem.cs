@@ -12,7 +12,7 @@ public class PlacementSystem : MonoBehaviour {
         return new Vector2(mousePositionPoint.x, mousePositionPoint.y);
     }
 
-    private void Start() {
+    private void Awake() {
         indicatorSpriteRenderer = cellIndicator.GetComponent<SpriteRenderer>();
 
         Vector2 indicatorDimensions = indicatorSpriteRenderer.bounds.size;
