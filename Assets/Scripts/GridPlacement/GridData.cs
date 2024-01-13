@@ -29,4 +29,16 @@ public class GridData {
         }
     }
 
+    public bool CanPlaceAt(Vector2Int position, Vector2Int size) {
+        List<Vector2Int> positionsToOccupy = CalculateOccupiedPositions(position, size);
+
+        foreach (Vector2Int positionToOccupy in positionsToOccupy) {
+            if (gridPlacementData.ContainsKey(positionToOccupy)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
