@@ -16,13 +16,15 @@ public class PlaceableObjectsDB : ScriptableObject {
         }
 
         foreach (PlaceableObject placeableObject in PlaceableObjects) {
-            SpriteRenderer towerGameObject = placeableObject?.Prefab?.GetComponentInChildren<SpriteRenderer>();
-            if (placeableObject.OverrideCalculatedSize || towerGameObject == null) {
+            if (placeableObject.OverrideCalculatedSize || placeableObject?.Prefab == null) {
                 continue;
             }
-            int sizeXInGridUnits = Mathf.CeilToInt(towerGameObject.bounds.size.x / gridCellSize.x);
-            int sizeYInGridUnits = Mathf.CeilToInt(towerGameObject.bounds.size.y / gridCellSize.y);
-            placeableObject.Size = new Vector2Int(sizeXInGridUnits, sizeYInGridUnits);
+
+            SpriteRenderer towerGameObject = placeableObject.Prefab.GetComponentInChildren<SpriteRenderer>();
+            if (towerGameObject == null) {
+                continue;
+            }
+            placeableObject.Size = TransformHelpers.GetSpriteSizeInGridCells(towerGameObject, gridCellSize);
         }
     }
 

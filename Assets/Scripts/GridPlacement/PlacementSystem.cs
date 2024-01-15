@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlacementSystem : MonoBehaviour {
     [Header("References")]
@@ -7,10 +8,12 @@ public class PlacementSystem : MonoBehaviour {
     [SerializeField] private InputManager inputManager;
     [SerializeField] private GameObject placementSystemPanel;
     [SerializeField] private PlaceableObjectsDB placeableObjectsDB;
+    [SerializeField] private Tilemap pathTilemap;
 
     private SpriteRenderer indicatorSpriteRenderer;
     private PlaceableObject selectedObject = null;
     private bool isBuilderActive = false;
+    private GridData gridData;
 
     private void Awake() {
         UpdateBuilderState(false);
@@ -18,6 +21,15 @@ public class PlacementSystem : MonoBehaviour {
         Vector2 indicatorDimensions = indicatorSpriteRenderer.bounds.size;
         cellIndicator.transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
         inputManager.ActivateBuilder += StopPlacement;
+    }
+
+
+    private bool CanPlaceObjectOnTile(Vector3 mousePosition) {
+        Vector3Int pathTilemapCellPosition = pathTilemap.WorldToCell(mousePosition);
+        if (pathTilemap.GetTile(pathTilemapCellPosition) == null) {
+            return true;
+        }
+        return false;
     }
 
     private void UpdateBuilderState(bool newBuilderState) {
@@ -41,6 +53,8 @@ public class PlacementSystem : MonoBehaviour {
         Vector2 mousePosition = GetMousePosition();
         Vector3Int cellPosition = grid.WorldToCell(mousePosition);
         cellIndicator.transform.position = grid.GetCellCenterWorld(cellPosition);
+        indicatorSpriteRenderer.color = CanPlaceObjectOnTile(mousePosition) ? Color.white : Color.red;
+
     }
 
     public void StartPlacement(int placeableObjectID) {

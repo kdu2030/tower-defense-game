@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 public class TransformHelpers {
     public static Quaternion GetTargetAngle(Transform baseTransform, Transform targetTransform) {
@@ -8,6 +9,13 @@ public class TransformHelpers {
 
     public static Vector2 GetScaleFromDimensions(Vector2 originalDimensions, Vector2 targetDimensions) {
         return targetDimensions / originalDimensions;
+    }
+
+    public static Vector2Int GetSpriteSizeInGridCells(SpriteRenderer gameObjectSprite, Vector2Int gridCellSize) {
+        int sizeXInGridUnits = Mathf.CeilToInt(gameObjectSprite.bounds.size.x / gridCellSize.x);
+        int sizeYInGridUnits = Mathf.CeilToInt(gameObjectSprite.bounds.size.y / gridCellSize.y);
+
+        return new Vector2Int(sizeXInGridUnits, sizeYInGridUnits);
     }
 
 }
