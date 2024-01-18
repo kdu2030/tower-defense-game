@@ -18,8 +18,6 @@ public class PlacementSystem : MonoBehaviour {
     private void Awake() {
         UpdateBuilderState(false);
         indicatorSpriteRenderer = cellIndicator.GetComponent<SpriteRenderer>();
-        Vector2 indicatorDimensions = indicatorSpriteRenderer.bounds.size;
-        cellIndicator.transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
         inputManager.ActivateBuilder += StopPlacement;
     }
 
