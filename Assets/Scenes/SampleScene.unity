@@ -914,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 1897368735}
-  pathTilemap: {fileID: 0}
+  pathTilemap: {fileID: 1883304114}
 --- !u!61 &172066973
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3594,7 +3594,7 @@ GameObject:
   - component: {fileID: 660864221}
   m_Layer: 0
   m_Name: Tree1
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55484,7 +55484,7 @@ GameObject:
   - component: {fileID: 1670063450}
   m_Layer: 0
   m_Name: Terrain Objects
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

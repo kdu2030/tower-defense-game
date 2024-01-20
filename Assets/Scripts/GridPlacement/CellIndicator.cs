@@ -8,6 +8,7 @@ public class CellIndicator : MonoBehaviour {
 
     private SpriteRenderer spriteRenderer;
     public bool IsValid { get; set; } = true;
+    private bool onTerrainObject = false;
 
     // TODO: Need Script to attach the following to each terrain object
     /*
@@ -26,28 +27,31 @@ public class CellIndicator : MonoBehaviour {
     }
 
     public bool CanPlaceObjectOnTile(Vector3 mousePosition) {
-        if (!IsValid) return false;
+        if (onTerrainObject) return false;
 
         Vector3Int pathTilemapCellPosition = pathTilemap.WorldToCell(mousePosition);
-        if (pathTilemap.GetTile(pathTilemapCellPosition) == null) {
-            return true;
+        if (pathTilemap.GetTile(pathTilemapCellPosition) != null) {
+            return false;
         }
-        return false;
+        return true;
+    }
+
+    private bool CollidedWithTerrainObject(Collider2D collision) {
+        Transform parentGameObjectTransform = collision.gameObject.GetComponentInParent<Transform>();
+        GameObject parentGameObject = parentGameObjectTransform.gameObject;
+        return parentGameObject.tag.Equals(TagConstants.Terrain);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.gameObject.tag == TagConstants.Terrain) {
-            IsValid = false;
-        }
+        onTerrainObject = CollidedWithTerrainObject(collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if (collision.gameObject.tag == TagConstants.Terrain) {
-            IsValid = true;
-        }
+        onTerrainObject = false;
     }
 
     private void Update() {
+        IsValid = CanPlaceObjectOnTile(transform.position);
         spriteRenderer.color = IsValid ? Color.white : Color.red;
     }
 }
