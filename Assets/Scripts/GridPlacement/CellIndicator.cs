@@ -13,7 +13,6 @@ public class CellIndicator : MonoBehaviour {
     // TODO: Need Script to attach the following to each terrain object
     /*
      * 1. Attach Rigidbody2D and Box Collider 2D to each terrain object
-     * 2. Modify the tag to be Terrain
      */
 
     private void Awake() {
