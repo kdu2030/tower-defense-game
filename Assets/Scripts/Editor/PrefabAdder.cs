@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.U2D;
 using UnityEngine;
 
 public class PrefabAdder : EditorWindow {
@@ -9,7 +12,7 @@ public class PrefabAdder : EditorWindow {
     public SerializedObject serializedObject;
 
     private GameObject parentGameObject;
-    private Dictionary<string, GameObject> spriteNameToPrefab;
+    private Dictionary<int, GameObject> spriteHashToPrefab;
 
 
 
@@ -23,7 +26,6 @@ public class PrefabAdder : EditorWindow {
     private void OnEnable() {
         serializedObject = new SerializedObject(this);
         prefabsSerializedProperty = serializedObject.FindProperty("prefabs");
-        spriteNameToPrefab = new Dictionary<string, GameObject>();
     }
 
     private bool IsSubmitDisabled() {
@@ -41,39 +43,49 @@ public class PrefabAdder : EditorWindow {
     }
 
     private void PopulatePrefabDictionary() {
+        spriteHashToPrefab = new Dictionary<int, GameObject>();
+
         foreach (GameObject prefab in prefabs) {
             SpriteRenderer spriteRenderer = prefab.GetComponent<SpriteRenderer>();
             if (spriteRenderer == null) {
                 continue;
             }
-            spriteNameToPrefab.Add(spriteRenderer.sprite.name, prefab);
+            spriteHashToPrefab.Add(spriteRenderer.sprite.GetHashCode(), prefab);
         }
     }
 
     private void FindAndAddPrefab(Transform childObjectTransform) {
         GameObject childObject = childObjectTransform.gameObject;
         SpriteRenderer spriteRenderer = childObject.GetComponent<SpriteRenderer>();
-
-        GameObject prefab = spriteNameToPrefab[spriteRenderer.sprite.name];
-        if (prefab == null) {
+        if (childObject.IsPrefabInstance() || spriteRenderer == null) {
             return;
         }
 
-        //TODO: Instantiate and Destroy here
+        GameObject prefab;
+        bool foundPrefab = spriteHashToPrefab.TryGetValue(spriteRenderer.sprite.GetHashCode(), out prefab);
+
+        if (!foundPrefab) {
+            return;
+        }
+
+        ConvertToPrefabInstanceSettings settings = new ConvertToPrefabInstanceSettings();
+        PrefabUtility.ConvertToPrefabInstance(childObject, prefab, settings, InteractionMode.UserAction);
     }
 
 
 
     private void AddPrefabsToChildren() {
+        // Note - GetComponentsInChildren also returns the transform of the parent
         Transform[] childrenTransforms = parentGameObject.GetComponentsInChildren<Transform>();
+
         if (prefabs.Length == 0 || childrenTransforms.Length == 0) {
-            throw new System.Exception("Terrain Parent must have children and Prefab List must be populated");
+            throw new Exception("Terrain Parent must have children and Prefab List must be populated");
         }
 
         PopulatePrefabDictionary();
 
         foreach (Transform childTransform in childrenTransforms) {
-
+            FindAndAddPrefab(childTransform);
         }
     }
 
@@ -90,7 +102,11 @@ public class PrefabAdder : EditorWindow {
         EditorGUILayout.Space();
 
         EditorGUI.BeginDisabledGroup(IsSubmitDisabled());
-        GUILayout.Button("Add Prefabs to Children");
+
+        if (GUILayout.Button("Add Prefabs to Children")) {
+            AddPrefabsToChildren();
+        };
+
         EditorGUI.EndDisabledGroup();
 
 
