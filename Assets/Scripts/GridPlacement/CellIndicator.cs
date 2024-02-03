@@ -8,7 +8,7 @@ public class CellIndicator : MonoBehaviour {
 
     private SpriteRenderer spriteRenderer;
     public bool IsValid { get; set; } = true;
-    private bool onTerrainObject = false;
+    private GameObject overlappingTerrainObject = null;
 
     // TODO: Need Script to attach the following to each terrain object
     /*
@@ -26,7 +26,7 @@ public class CellIndicator : MonoBehaviour {
     }
 
     public bool CanPlaceObjectOnTile(Vector3 mousePosition) {
-        if (onTerrainObject) return false;
+        if (overlappingTerrainObject != null) return false;
 
         Vector3Int pathTilemapCellPosition = pathTilemap.WorldToCell(mousePosition);
         if (pathTilemap.GetTile(pathTilemapCellPosition) != null) {
@@ -42,11 +42,15 @@ public class CellIndicator : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        onTerrainObject = CollidedWithTerrainObject(collision);
+        if (CollidedWithTerrainObject(collision)) {
+            overlappingTerrainObject = collision.gameObject;
+        };
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        onTerrainObject = false;
+        if (overlappingTerrainObject != null && collision.gameObject.GetHashCode() == overlappingTerrainObject.GetHashCode()) {
+            overlappingTerrainObject = null;
+        }
     }
 
     private void Update() {
