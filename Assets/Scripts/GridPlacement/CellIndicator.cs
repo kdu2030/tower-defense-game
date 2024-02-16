@@ -10,11 +10,6 @@ public class CellIndicator : MonoBehaviour {
     public bool IsValid { get; set; } = true;
     private GameObject overlappingTerrainObject = null;
 
-    // TODO: Need Script to attach the following to each terrain object
-    /*
-     * 1. Attach Rigidbody2D and Box Collider 2D to each terrain object
-     */
-
     private void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         SetCellIndicatorScale();
