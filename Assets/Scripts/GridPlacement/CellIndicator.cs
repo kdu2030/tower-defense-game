@@ -60,6 +60,12 @@ public class CellIndicator : MonoBehaviour {
         };
     }
 
+    private void OnTriggerStay2D(Collider2D collision) {
+        if (overlappingTerrainObject == null && CollidedWithTerrainObject(collision)) {
+            overlappingTerrainObject = collision.gameObject;
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision) {
         if (overlappingTerrainObject != null && collision.gameObject.GetHashCode() == overlappingTerrainObject.GetHashCode()) {
             overlappingTerrainObject = null;
