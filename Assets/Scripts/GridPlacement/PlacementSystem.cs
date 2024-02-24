@@ -14,9 +14,15 @@ public class PlacementSystem : MonoBehaviour {
     private bool isBuilderActive = false;
     private GridData gridData;
 
+    private CellIndicator cellIndicatorHandler;
+
     private void Awake() {
         UpdateBuilderState(false);
         inputManager.ActivateBuilder += StopPlacement;
+    }
+
+    private void Start() {
+        cellIndicatorHandler = cellIndicator.GetComponent<CellIndicator>();
     }
 
     private void UpdateBuilderState(bool newBuilderState) {
@@ -37,9 +43,7 @@ public class PlacementSystem : MonoBehaviour {
     }
 
     private void UpdateCellIndicatorPosition() {
-        Vector2 mousePosition = GetMousePosition();
-        Vector3Int cellPosition = grid.WorldToCell(mousePosition);
-        cellIndicator.transform.position = grid.GetCellCenterWorld(cellPosition);
+        cellIndicatorHandler.UpdateCellIndicatorPosition(GetMousePosition());
     }
 
     public void StartPlacement(int placeableObjectID) {

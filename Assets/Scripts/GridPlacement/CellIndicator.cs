@@ -48,6 +48,11 @@ public class CellIndicator : MonoBehaviour {
         }
     }
 
+    public void UpdateCellIndicatorPosition(Vector2 mousePosition) {
+        Vector3Int cellPosition = grid.WorldToCell(mousePosition);
+        transform.position = grid.GetCellCenterWorld(cellPosition);
+    }
+
     private void Update() {
         IsValid = CanPlaceObjectOnTile(transform.position);
         spriteRenderer.color = IsValid ? Color.white : Color.red;
