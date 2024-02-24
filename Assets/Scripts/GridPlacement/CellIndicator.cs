@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,6 +10,7 @@ public class CellIndicator : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
     public bool IsValid { get; set; } = true;
     public GridData GameGridData { get; set; }
+    private List<GameObject> placedGameObjects = new List<GameObject>();
 
     private GameObject overlappingTerrainObject = null;
 
@@ -21,6 +23,13 @@ public class CellIndicator : MonoBehaviour {
     private void SetCellIndicatorScale() {
         Vector2 indicatorDimensions = spriteRenderer.bounds.size;
         transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
+    }
+
+    public void UpdateGridData(PlaceableObject placeableObjectTemplate, GameObject createdGameObject) {
+        // We need the top left of the current cell indicator position
+        Vector2Int gridPosition = (Vector2Int)grid.WorldToCell(transform.position);
+        GameGridData.AddObjectAt(placeableObjectTemplate.ID, placedGameObjects.Count + 1, gridPosition, placeableObjectTemplate.Size);
+        placedGameObjects.Add(createdGameObject);
     }
 
     public bool CanPlaceObjectOnTile(Vector2 mousePosition, PlaceableObject selectedObject) {

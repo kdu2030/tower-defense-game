@@ -61,6 +61,7 @@ public class PlacementSystem : MonoBehaviour {
 
         GameObject placedGameObject = Instantiate(selectedObject.Prefab);
         placedGameObject.transform.position = cellIndicator.transform.position;
+        cellIndicatorHandler.UpdateGridData(selectedObject, placedGameObject);
     }
 
     private void Update() {
