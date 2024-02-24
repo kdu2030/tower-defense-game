@@ -23,7 +23,7 @@ public class CellIndicator : MonoBehaviour {
         transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
     }
 
-    public bool CanPlaceObjectOnTile(Vector3 mousePosition, PlaceableObject selectedObject) {
+    public bool CanPlaceObjectOnTile(Vector2 mousePosition, PlaceableObject selectedObject) {
         if (overlappingTerrainObject != null) return false;
 
         Vector3Int pathTilemapCellPosition = pathTilemap.WorldToCell(mousePosition);
@@ -33,7 +33,7 @@ public class CellIndicator : MonoBehaviour {
 
         if (selectedObject != null) {
             Vector2Int gridPosition = (Vector2Int)grid.WorldToCell(mousePosition);
-            GameGridData.CanPlaceAt(gridPosition, selectedObject.Size);
+            return GameGridData.CanPlaceAt(gridPosition, selectedObject.Size);
         }
 
         return true;

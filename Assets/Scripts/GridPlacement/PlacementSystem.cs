@@ -55,19 +55,18 @@ public class PlacementSystem : MonoBehaviour {
     }
 
     public void PlaceGameObject() {
-        if (selectedObject == null || inputManager.IsPointerOverUI()) {
+        if (selectedObject == null || inputManager.IsPointerOverUI() || !cellIndicatorHandler.IsValid) {
             return;
         }
-        Vector2 mousePosition = GetMousePosition();
-        Vector3Int cellPosition = grid.WorldToCell(mousePosition);
+
         GameObject placedGameObject = Instantiate(selectedObject.Prefab);
-        placedGameObject.transform.position = cellPosition;
+        placedGameObject.transform.position = cellIndicator.transform.position;
     }
 
     private void Update() {
         if (isBuilderActive) {
             UpdateCellIndicatorPosition();
-            cellIndicatorHandler.IsValid = cellIndicatorHandler.CanPlaceObjectOnTile(transform.position, selectedObject);
+            cellIndicatorHandler.IsValid = cellIndicatorHandler.CanPlaceObjectOnTile(GetMousePosition(), selectedObject);
         }
 
     }
