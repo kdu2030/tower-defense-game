@@ -8,7 +8,6 @@ public class PlacementSystem : MonoBehaviour {
     [SerializeField] private InputManager inputManager;
     [SerializeField] private GameObject placementSystemPanel;
     [SerializeField] private PlaceableObjectsDB placeableObjectsDB;
-    [SerializeField] private Tilemap pathTilemap;
 
     private PlaceableObject selectedObject = null;
     private bool isBuilderActive = false;
@@ -68,6 +67,7 @@ public class PlacementSystem : MonoBehaviour {
     private void Update() {
         if (isBuilderActive) {
             UpdateCellIndicatorPosition();
+            cellIndicatorHandler.IsValid = cellIndicatorHandler.CanPlaceObjectOnTile(transform.position, selectedObject);
         }
 
     }

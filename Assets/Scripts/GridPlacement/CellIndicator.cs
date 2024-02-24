@@ -8,11 +8,14 @@ public class CellIndicator : MonoBehaviour {
 
     private SpriteRenderer spriteRenderer;
     public bool IsValid { get; set; } = true;
+    public GridData GameGridData { get; set; }
+
     private GameObject overlappingTerrainObject = null;
 
     private void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         SetCellIndicatorScale();
+        GameGridData = new GridData();
     }
 
     private void SetCellIndicatorScale() {
@@ -20,13 +23,19 @@ public class CellIndicator : MonoBehaviour {
         transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
     }
 
-    public bool CanPlaceObjectOnTile(Vector3 mousePosition) {
+    public bool CanPlaceObjectOnTile(Vector3 mousePosition, PlaceableObject selectedObject) {
         if (overlappingTerrainObject != null) return false;
 
         Vector3Int pathTilemapCellPosition = pathTilemap.WorldToCell(mousePosition);
         if (pathTilemap.GetTile(pathTilemapCellPosition) != null) {
             return false;
         }
+
+        if (selectedObject != null) {
+            Vector2Int gridPosition = (Vector2Int)grid.WorldToCell(mousePosition);
+            GameGridData.CanPlaceAt(gridPosition, selectedObject.Size);
+        }
+
         return true;
     }
 
@@ -54,7 +63,6 @@ public class CellIndicator : MonoBehaviour {
     }
 
     private void Update() {
-        IsValid = CanPlaceObjectOnTile(transform.position);
         spriteRenderer.color = IsValid ? Color.white : Color.red;
     }
 }
