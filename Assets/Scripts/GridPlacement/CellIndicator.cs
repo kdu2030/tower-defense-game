@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,16 +9,15 @@ public class CellIndicator : MonoBehaviour {
 
     private SpriteRenderer spriteRenderer;
     public bool IsValid { get; set; } = true;
-    private GameObject overlappingTerrainObject = null;
+    public GridData GameGridData { get; set; }
+    private List<GameObject> placedGameObjects = new List<GameObject>();
 
-    // TODO: Need Script to attach the following to each terrain object
-    /*
-     * 1. Attach Rigidbody2D and Box Collider 2D to each terrain object
-     */
+    private GameObject overlappingTerrainObject = null;
 
     private void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         SetCellIndicatorScale();
+        GameGridData = new GridData();
     }
 
     private void SetCellIndicatorScale() {
@@ -25,13 +25,26 @@ public class CellIndicator : MonoBehaviour {
         transform.localScale = TransformHelpers.GetScaleFromDimensions(indicatorDimensions, grid.cellSize);
     }
 
-    public bool CanPlaceObjectOnTile(Vector3 mousePosition) {
+    public void UpdateGridData(PlaceableObject placeableObjectTemplate, GameObject createdGameObject) {
+        // We need the top left of the current cell indicator position
+        Vector2Int gridPosition = (Vector2Int)grid.WorldToCell(transform.position);
+        GameGridData.AddObjectAt(placeableObjectTemplate.ID, placedGameObjects.Count + 1, gridPosition, placeableObjectTemplate.Size);
+        placedGameObjects.Add(createdGameObject);
+    }
+
+    public bool CanPlaceObjectOnTile(Vector2 mousePosition, PlaceableObject selectedObject) {
         if (overlappingTerrainObject != null) return false;
 
         Vector3Int pathTilemapCellPosition = pathTilemap.WorldToCell(mousePosition);
         if (pathTilemap.GetTile(pathTilemapCellPosition) != null) {
             return false;
         }
+
+        if (selectedObject != null) {
+            Vector2Int gridPosition = (Vector2Int)grid.WorldToCell(mousePosition);
+            return GameGridData.CanPlaceAt(gridPosition, selectedObject.Size);
+        }
+
         return true;
     }
 
@@ -47,14 +60,24 @@ public class CellIndicator : MonoBehaviour {
         };
     }
 
+    private void OnTriggerStay2D(Collider2D collision) {
+        if (overlappingTerrainObject == null && CollidedWithTerrainObject(collision)) {
+            overlappingTerrainObject = collision.gameObject;
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision) {
         if (overlappingTerrainObject != null && collision.gameObject.GetHashCode() == overlappingTerrainObject.GetHashCode()) {
             overlappingTerrainObject = null;
         }
     }
 
+    public void UpdateCellIndicatorPosition(Vector2 mousePosition) {
+        Vector3Int cellPosition = grid.WorldToCell(mousePosition);
+        transform.position = grid.GetCellCenterWorld(cellPosition);
+    }
+
     private void Update() {
-        IsValid = CanPlaceObjectOnTile(transform.position);
         spriteRenderer.color = IsValid ? Color.white : Color.red;
     }
 }
